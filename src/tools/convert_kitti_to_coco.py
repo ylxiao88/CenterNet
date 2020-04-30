@@ -10,7 +10,7 @@ DATA_PATH = '../../data/kitti/'
 DEBUG = False
 # VAL_PATH = DATA_PATH + 'training/label_val/'
 import os
-SPLITS = ['3dop', 'subcnn'] 
+SPLITS = ['3dop', 'subcnn']
 import _init_paths
 from utils.ddd_utils import compute_box_3d, project_to_image, alpha2rot_y
 from utils.ddd_utils import draw_box_3d, unproject_2d_to_3d
@@ -56,7 +56,7 @@ F = 721
 H = 384 # 375
 W = 1248 # 1242
 EXT = [45.75, -0.34, 0.005]
-CALIB = np.array([[F, 0, W / 2, EXT[0]], [0, F, H / 2, EXT[1]], 
+CALIB = np.array([[F, 0, W / 2, EXT[0]], [0, F, H / 2, EXT[1]],
                   [0, 0, 1, EXT[2]]], dtype=np.float32)
 
 cat_info = []
@@ -92,7 +92,7 @@ for SPLIT in SPLITS:
       # if split == 'val':
       #   os.system('cp {} {}/'.format(ann_path, VAL_PATH))
       anns = open(ann_path, 'r')
-      
+
       if DEBUG:
         image = cv2.imread(
           DATA_PATH + 'images/trainval/' + image_info['file_name'])
@@ -127,7 +127,7 @@ for SPLIT in SPLITS:
           image = draw_box_3d(image, box_2d)
           x = (bbox[0] + bbox[2]) / 2
           '''
-          print('rot_y, alpha2rot_y, dlt', tmp[0], 
+          print('rot_y, alpha2rot_y, dlt', tmp[0],
                 rotation_y, alpha2rot_y(alpha, x, calib[0, 2], calib[0, 0]),
                 np.cos(
                   rotation_y - alpha2rot_y(alpha, x, calib[0, 2], calib[0, 0])))
@@ -148,5 +148,5 @@ for SPLIT in SPLITS:
     print("# annotations: ", len(ret['annotations']))
     # import pdb; pdb.set_trace()
     out_path = '{}/annotations/kitti_{}_{}.json'.format(DATA_PATH, SPLIT, split)
-    json.dump(ret, open(out_path, 'w'))
-  
+    json.dump(ret, open(out_path, 'w+'))
+

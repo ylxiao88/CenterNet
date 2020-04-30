@@ -40,7 +40,7 @@ class DddDataset(data.Dataset):
       s = np.array([self.opt.input_w, self.opt.input_h], dtype=np.int32)
     else:
       s = np.array([width, height], dtype=np.int32)
-    
+
     aug = False
     if self.split == 'train' and np.random.random() < self.opt.aug_ddd:
       aug = True
@@ -52,7 +52,7 @@ class DddDataset(data.Dataset):
 
     trans_input = get_affine_transform(
       c, s, 0, [self.opt.input_w, self.opt.input_h])
-    inp = cv2.warpAffine(img, trans_input, 
+    inp = cv2.warpAffine(img, trans_input,
                          (self.opt.input_w, self.opt.input_h),
                          flags=cv2.INTER_LINEAR)
     inp = (inp.astype(np.float32) / 255.)
@@ -106,9 +106,9 @@ class DddDataset(data.Dataset):
           ignore_id = [_ for _ in range(num_classes)] \
                       if cls_id == - 1 else  [- cls_id - 2]
           if self.opt.rect_mask:
-            hm[ignore_id, int(bbox[1]): int(bbox[3]) + 1, 
+            hm[ignore_id, int(bbox[1]): int(bbox[3]) + 1,
               int(bbox[0]): int(bbox[2]) + 1] = 0.9999
-          else:
+          else: # default
             for cc in ignore_id:
               draw_gaussian(hm[cc], ct, radius)
             hm[ignore_id, ct_int[1], ct_int[0]] = 0.9999
@@ -127,7 +127,7 @@ class DddDataset(data.Dataset):
           # print('img_id cls_id alpha rot_y', img_path, cls_id, alpha, ann['rotation_y'])
           if alpha < np.pi / 6. or alpha > 5 * np.pi / 6.:
             rotbin[k, 0] = 1
-            rotres[k, 0] = alpha - (-0.5 * np.pi)    
+            rotres[k, 0] = alpha - (-0.5 * np.pi)
           if alpha > -np.pi / 6. or alpha < -5 * np.pi / 6.:
             rotbin[k, 1] = 1
             rotres[k, 1] = alpha - (0.5 * np.pi)
@@ -140,7 +140,7 @@ class DddDataset(data.Dataset):
           rot_mask[k] = 1
     # print('gt_det', gt_det)
     # print('')
-    ret = {'input': inp, 'hm': hm, 'dep': dep, 'dim': dim, 'ind': ind, 
+    ret = {'input': inp, 'hm': hm, 'dep': dep, 'dim': dim, 'ind': ind,
            'rotbin': rotbin, 'rotres': rotres, 'reg_mask': reg_mask,
            'rot_mask': rot_mask}
     if self.opt.reg_bbox:
@@ -153,7 +153,7 @@ class DddDataset(data.Dataset):
       meta = {'c': c, 's': s, 'gt_det': gt_det, 'calib': calib,
               'image_path': img_path, 'img_id': img_id}
       ret['meta'] = meta
-    
+
     return ret
 
   def _alpha_to_8(self, alpha):

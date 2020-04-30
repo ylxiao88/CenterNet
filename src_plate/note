@@ -1,0 +1,1 @@
+python main.py --demo ../data/plate --load_model ../exp/ctdet/plate/model_best.pth --gpus 6,7
