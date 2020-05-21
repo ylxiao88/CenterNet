@@ -1,4 +1,5 @@
 .idea
+src_plate
 
 legacy/*
 .DS_Store
